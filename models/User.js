@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 
 var userSchema = new mongoose.Schema({
-  email: { type: String, unique: true, lowercase: true },
+  email: { type: String, unique: true, validate: email, lowercase: true },
   password: String,
 
   facebook: String,
@@ -45,6 +45,16 @@ userSchema.pre('save', function(next) {
     });
   });
 });
+
+/**
+ * Validate user's email.
+ * Verify email is in an actual email format
+ */
+ 
+ var email = [validateEmail, 'Invalid email address.']
+ function validateEmail (val) {
+   return /^[\+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(val);
+ };
 
 /**
  * Validate user's password.
